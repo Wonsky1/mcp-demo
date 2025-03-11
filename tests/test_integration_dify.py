@@ -25,9 +25,9 @@ def generate_domains(name: str, description: str = "", keywords: list = [], coun
         "user": "test-user"
     }
     response = requests.post(url, headers=headers, json=data)
-    return response.json()["data"]["outputs"]["output"]
-
-    # return [{"domain": "example.com", "is_available": True, "price": 10.99}] * 15
+    json_response = response.json()
+    print(json_response)
+    return json_response["data"]["outputs"]["output"]
 
 
 def test_domain_list_structure():
