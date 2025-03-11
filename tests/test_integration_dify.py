@@ -22,7 +22,7 @@ def generate_domains(name: str, description: str = "", keywords: list = [], coun
             "count": count
         },
         "response_mode": "blocking",
-        "user": "abc-123"
+        "user": "test-user"
     }
     response = requests.post(url, headers=headers, json=data)
     return response.json()["data"]["outputs"]["output"]
@@ -68,7 +68,6 @@ def test_domain_format():
     
     for domain in domains:
         domain_name = domain["domain"]
-        # Valid domain format (basic check)
         assert re.match(r'^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$', domain_name)
 
 
@@ -80,8 +79,4 @@ def test_input_variations():
     domain_names1 = set(d["domain"] for d in domains1)
     domain_names2 = set(d["domain"] for d in domains2)
     
-    # There should be significant difference between the sets
     assert len(domain_names1.intersection(domain_names2)) < 5  # Less than 1/3 overlap
-
-
-# print(generate_domains("destilabs", "an outsource company", ["AI"], 1))
