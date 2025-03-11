@@ -26,7 +26,6 @@ def generate_domains(name: str, description: str = "", keywords: list = [], coun
     }
     response = requests.post(url, headers=headers, json=data)
     json_response = response.json()
-    print(json_response)
     return json_response["data"]["outputs"]["output"]
 
 
