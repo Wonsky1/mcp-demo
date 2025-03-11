@@ -5,6 +5,6 @@ app = FastAPI()
 
 @app.get("/check-domain")
 async def check_domains(domain: str):
-    is_free = choice([True, False])
+    is_available = choice([True, False])
     price = randint(1, 100)
-    return {"domain": domain, "is_free": is_free, "price": price}
+    return {"domain": domain, "is_available": is_available, "price": price}
