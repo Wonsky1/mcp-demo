@@ -4,7 +4,7 @@ from core.config import settings
 
 def generate_domains(
     name: str, description: str = "", keywords: str = "", count: int = 15
-) -> list:
+) -> dict:
     url = settings.DIFY_WORKFLOW_URL
     headers = {
         "Authorization": f"Bearer {settings.DIFY_API_KEY}",
@@ -20,14 +20,22 @@ def generate_domains(
         "response_mode": "blocking",
         "user": "test-user",
     }
-    response = requests.post(url, headers=headers, json=data)
-    json_response = response.json()
-    if (
-        json_response.get("data")
-        and json_response["data"].get("outputs")
-        and json_response["data"]["outputs"].get("output")
-    ):
-        return json_response["data"]["outputs"]["output"]
-    else:
-        print("Error processing that request")
+    try:
+        response = requests.post(url, headers=headers, json=data, timeout=10)
+        response.raise_for_status()  # Raise exception for 4XX/5XX responses
+        json_response = response.json()
+        
+        if (
+            json_response.get("data")
+            and json_response["data"].get("outputs")
+            and json_response["data"]["outputs"].get("output")
+        ):
+            return json_response["data"]["outputs"]["output"]
+        else:
+            # Log the error properly
+            print(f"API returned unexpected response structure: {json_response}")
+            return {}
+    except requests.exceptions.RequestException as e:
+        # Log the error properly
+        print(f"Error making request to Dify API: {str(e)}")
         return {}
