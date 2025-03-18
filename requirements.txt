@@ -1,6 +1,8 @@
 fastapi
 uvicorn
+httpx
 
 pytest
 requests
-python-dotenv
+
+pydantic-settings
