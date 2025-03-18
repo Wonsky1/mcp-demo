@@ -21,8 +21,8 @@ def generate_domains(
         "user": "test-user",
     }
     try:
-        response = requests.post(url, headers=headers, json=data, timeout=10)
-        response.raise_for_status()  # Raise exception for 4XX/5XX responses
+        response = requests.post(url, headers=headers, json=data)
+        response.raise_for_status()
         json_response = response.json()
         
         if (
