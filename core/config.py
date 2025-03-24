@@ -14,5 +14,9 @@ class Settings(BaseSettings):
 
     DIFY_WORKFLOW_URL: str = "https://api.dify.ai/v1/workflows/run"
 
+    ENOM_RESELLER_ID: str
+    ENOM_RESELLER_PASSWORD: str
+    ENOM_TEST_MODE: bool
+
 
 settings = Settings()
