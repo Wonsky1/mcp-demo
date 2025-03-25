@@ -21,7 +21,7 @@ def test_enom_client_initialization(mock_enom_client):
     assert mock_enom_client.base_url == "https://resellertest.enom.com/interface.asp"
 
 
-@patch("requests.get")
+@patch("requests.post")
 def test_check_domain_availability_available(mock_get, mock_enom_client):
     """Test domain availability check for an available domain"""
     mock_response = MagicMock()
@@ -34,7 +34,7 @@ def test_check_domain_availability_available(mock_get, mock_enom_client):
     mock_get.assert_called_once()
 
 
-@patch("requests.get")
+@patch("requests.post")
 def test_check_domain_availability_unavailable(mock_get, mock_enom_client):
     """Test domain availability check for an unavailable domain"""
     mock_response = MagicMock()
@@ -47,7 +47,7 @@ def test_check_domain_availability_unavailable(mock_get, mock_enom_client):
     mock_get.assert_called_once()
 
 
-@patch("requests.get")
+@patch("requests.post")
 def test_register_domain_for_account_success(mock_get, mock_enom_client):
     """Test successful domain registration"""
     mock_response = MagicMock()
@@ -81,7 +81,7 @@ def test_register_domain_for_account_no_contact_info(mock_enom_client):
         mock_enom_client.register_domain_for_account("example.com")
 
 
-@patch("requests.get")
+@patch("requests.post")
 def test_create_sub_account_success(mock_get, mock_enom_client):
     """Test successful sub-account creation"""
     mock_response = MagicMock()
@@ -97,7 +97,7 @@ def test_create_sub_account_success(mock_get, mock_enom_client):
     mock_get.assert_called_once()
 
 
-@patch("requests.get")
+@patch("requests.post")
 def test_get_domains_by_account(mock_get, mock_enom_client):
     """Test retrieving domains for an account"""
     mock_response = MagicMock()
@@ -122,7 +122,7 @@ def test_get_domains_by_account(mock_get, mock_enom_client):
     mock_get.assert_called_once()
 
 
-@patch("requests.get")
+@patch("requests.post")
 def test_register_domain_with_valid_response_success(mock_get, mock_enom_client):
     """Test successful domain registration with valid response"""
     mock_response = MagicMock()
@@ -155,7 +155,7 @@ def test_register_domain_with_valid_response_success(mock_get, mock_enom_client)
     mock_get.assert_called_once()
 
 
-@patch("requests.get")
+@patch("requests.post")
 def test_register_domain_with_valid_response_failure(mock_get, mock_enom_client):
     """Test domain registration with invalid RRP code"""
     mock_response = MagicMock()

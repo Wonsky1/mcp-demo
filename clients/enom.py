@@ -27,29 +27,6 @@ class EnomClient:
         else:
             self.base_url = "https://reseller.enom.com/interface.asp"
 
-    def check_domain_availability(self, domain_name):
-        """
-        Check if a domain is available for registration
-
-        Args:
-            domain_name (str): Domain name to check
-
-        Returns:
-            dict: Response from Enom API
-        """
-        sld, tld = domain_name.split(".")
-
-        params = {
-            "command": "Check",
-            "SLD": sld,
-            "TLD": tld,
-            "UID": self.reseller_id,
-            "PW": self.reseller_password,
-            "ResponseType": "XML",
-        }
-
-        response = requests.get(f"{self.base_url}?{urlencode(params)}")
-        return self._parse_response(response.text)
 
     def _register_domain(
         self, domain_name: str, contact_info: dict, registration_period: int = 1
@@ -95,7 +72,8 @@ class EnomClient:
         }
         params.update(contact_fields)
 
-        response = requests.get(f"{self.base_url}?{urlencode(params)}")
+        response = requests.post(self.base_url, data=params)
+
         return self._parse_xml_response(response)
 
     def register_domain_with_valid_response(
@@ -169,7 +147,7 @@ class EnomClient:
             "ResponseType": "XML",
         }
 
-        response = requests.get(f"{self.base_url}?{urlencode(params)}")
+        response = requests.post(self.base_url, data=params)
         # In production, parse XML properly
         return "Domain is available" in response.text
 
@@ -244,7 +222,7 @@ class EnomClient:
         #     for i, ns in enumerate(name_servers, 1):
         #         params[f"NS{i}"] = ns
 
-        response = requests.get(f"{self.base_url}?{urlencode(params)}")
+        response = requests.post(self.base_url, data=params)
 
         xml_str = response.content.decode("utf-8")
 
@@ -285,7 +263,7 @@ class EnomClient:
             "ResponseType": "XML",
         }
 
-        response = requests.get(f"{self.base_url}?{urlencode(params)}")
+        response = requests.post(self.base_url, data=params)
 
         xml_str = response.content.decode("utf-8")
 
@@ -350,7 +328,7 @@ class EnomClient:
             "ResponseType": "XML",
         }
 
-        response = requests.get(f"{self.base_url}?{urlencode(params)}")
+        response = requests.post(self.base_url, data=params)
         xml_str = response.content.decode("utf-8")
 
         data_dict = xmltodict.parse(xml_str)
@@ -377,7 +355,7 @@ class EnomClient:
             "ResponseType": "XML",
         }
 
-        response = requests.get(f"{self.base_url}?{urlencode(params)}")
+        response = requests.post(self.base_url, data=params)
         xml_str = response.content.decode("utf-8")
 
         data_dict = xmltodict.parse(xml_str)
