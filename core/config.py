@@ -16,7 +16,7 @@ class Settings(BaseSettings):
 
     ENOM_RESELLER_ID: str
     ENOM_RESELLER_PASSWORD: str
-    ENOM_TEST_MODE: bool
+    ENOM_TEST_MODE: bool = True
 
 
 settings = Settings()
