@@ -31,6 +31,7 @@ jobs:
       run: |
         gcloud auth configure-docker us-central1-docker.pkg.dev
         docker build -t us-central1-docker.pkg.dev/destilabs/gcf-artifacts/jvg:${{ github.sha }} \
+          --build-arg DIFY_API_KEY=${{ secrets.DIFY_API_KEY }} \
           --build-arg ENOM_RESELLER_ID=${{ secrets.ENOM_RESELLER_ID }} \
           --build-arg ENOM_RESELLER_PASSWORD=${{ secrets.ENOM_RESELLER_PASSWORD }} \
           --build-arg ENOM_TEST_MODE=True \
