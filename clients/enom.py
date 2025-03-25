@@ -10,10 +10,6 @@ class EnomClient:
     Client for interacting with the Enom API to register domains
     """
 
-    MANDATORY_DOMAIN_REGISTRATION_FIELDS = (
-        "last_name", "address1", "city", "postal_code", "country", "email"
-    )
-
     def __init__(self, reseller_id, reseller_password, test_mode=True):
         """
         Initialize the Enom API client
@@ -49,17 +45,14 @@ class EnomClient:
             "TLD": tld,
             "UID": self.reseller_id,
             "PW": self.reseller_password,
-            "ResponseType": "XML"
+            "ResponseType": "XML",
         }
 
         response = requests.get(f"{self.base_url}?{urlencode(params)}")
         return self._parse_response(response.text)
 
     def _register_domain(
-        self,
-        domain_name: str,
-        contact_info: dict,
-        registration_period: int = 1
+        self, domain_name: str, contact_info: dict, registration_period: int = 1
     ) -> dict:
         """
         Register a new domain
@@ -84,7 +77,7 @@ class EnomClient:
             "UID": self.reseller_id,
             "PW": self.reseller_password,
             "NumYears": registration_period,
-            "ResponseType": "XML"
+            "ResponseType": "XML",
         }
 
         contact_fields = {
@@ -106,27 +99,21 @@ class EnomClient:
         return self._parse_xml_response(response)
 
     def register_domain_with_valid_response(
-        self,
-        domain_name: str,
-        contact_info: dict,
-        registration_period: int = 1
+        self, domain_name: str, contact_info: dict, registration_period: int = 1
     ) -> dict:
-        result = {
-            "result": "",
-            "additional": ""
-        }
+        result = {"result": "", "additional": ""}
 
         registered = self._register_domain(
             domain_name=domain_name,
             contact_info=contact_info,
-            registration_period=registration_period
+            registration_period=registration_period,
         )
         interface_response = registered.get("interface-response")
         if not interface_response:
             result["result"] = "Not registered"
             result["additional"] = "Failed to get interface response"
             return result
-        
+
         rrp_code = interface_response.get("RRPCode")
 
         if not rrp_code:
@@ -136,14 +123,19 @@ class EnomClient:
 
         if rrp_code != "200":
             result["result"] = "Not registered"
-            result["additional"] = f"{interface_response.get('RRPText', 'Failed to get RRPText')}, error_count: {interface_response.get('ErrCount')}, errors: {interface_response.get('errors')}"
+            result["additional"] = (
+                f"{interface_response.get('RRPText', 'Failed to get RRPText')}, error_count: {interface_response.get('ErrCount')}, errors: {interface_response.get('errors')}"
+            )
             return result
-        
-        result["result"] = interface_response.get("OrderStatus", "Failed to get OrderStatus")
-        result["additional"] = interface_response.get("OrderDescription", "Failed to get OrderDescription")
+
+        result["result"] = interface_response.get(
+            "OrderStatus", "Failed to get OrderStatus"
+        )
+        result["additional"] = interface_response.get(
+            "OrderDescription", "Failed to get OrderDescription"
+        )
 
         return result
-
 
     def _parse_xml_response(self, response: requests.Response) -> dict:
         """
@@ -182,7 +174,10 @@ class EnomClient:
         return "Domain is available" in response.text
 
     def register_domain_for_account(
-        self, domain_name, registration_period=1, contact_info=None,
+        self,
+        domain_name,
+        registration_period=1,
+        contact_info=None,
         reseller_id: Optional[str] = None,
         reseller_password: Optional[str] = None,
     ):
@@ -388,17 +383,17 @@ class EnomClient:
         data_dict = xmltodict.parse(xml_str)
         return "successfully" in response.text.lower()
 
+
 enom_client = None
 
 
 def get_enom_client() -> EnomClient:
-    """Dependency provider for the AgentGraph."""
+    """Dependency provider for the EnomClient."""
     global enom_client
     if enom_client is None:
         enom_client = EnomClient(
             reseller_id=settings.ENOM_RESELLER_ID,
             reseller_password=settings.ENOM_RESELLER_PASSWORD,
             test_mode=settings.ENOM_TEST_MODE,
-
         )
     return enom_client
