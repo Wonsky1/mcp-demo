@@ -95,10 +95,11 @@ class EnomClient:
         rrp_code = interface_response.get("RRPCode")
 
         if not rrp_code:
-            return interface_response
-            # result["result"] = "Not registered" TODO: Uncomment this line
-            # result["additional"] = "Failed to get RRP Code"
-            # return result
+            errors = interface_response.get("errors")
+
+            result["result"] = "Not registered"
+            result["additional"] = f"Failed to get RRP Code, errors: {errors}"
+            return result
 
         if rrp_code != "200":
             result["result"] = "Not registered"
