@@ -1,7 +1,7 @@
 name: Deploy to Google Cloud Run
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
@@ -30,17 +30,17 @@ jobs:
     - name: Build and push Docker image
       run: |
         gcloud auth configure-docker us-central1-docker.pkg.dev
-        docker build -t us-central1-docker.pkg.dev/destilabs/gcf-artifacts/listkit:${{ github.sha }} \
+        docker build -t us-central1-docker.pkg.dev/destilabs/gcf-artifacts/listkit-staging:${{ github.sha }} \
           --build-arg DIFY_API_KEY=${{ secrets.DIFY_API_KEY }} \
           --build-arg ENOM_RESELLER_ID=${{ secrets.ENOM_RESELLER_ID }} \
           --build-arg ENOM_RESELLER_PASSWORD=${{ secrets.ENOM_RESELLER_PASSWORD }} \
           --build-arg ENOM_TEST_MODE=True \
           .
-        docker push us-central1-docker.pkg.dev/destilabs/gcf-artifacts/listkit:${{ github.sha }}
+        docker push us-central1-docker.pkg.dev/destilabs/gcf-artifacts/listkit-staging:${{ github.sha }}
 
     - name: Deploy to Cloud Run
       run: |
-        gcloud run deploy ${{ github.event.repository.name }} \
+        gcloud run deploy ${{ github.event.repository.name }}-staging \
           --image us-central1-docker.pkg.dev/destilabs/gcf-artifacts/listkit:${{ github.sha }} \
           --platform managed \
           --region ${{ env.GCP_REGION }} \
