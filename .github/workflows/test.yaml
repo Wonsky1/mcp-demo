@@ -25,3 +25,6 @@ jobs:
           pytest tests -v
         env:
           DIFY_API_KEY: ${{ secrets.DIFY_API_KEY }}
+          ENOM_RESELLER_ID: ${{ secrets.ENOM_RESELLER_ID }}
+          ENOM_RESELLER_PASSWORD: ${{ secrets.ENOM_RESELLER_PASSWORD }}
+          ENOM_TEST_MODE: True

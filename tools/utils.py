@@ -24,7 +24,7 @@ def generate_domains(
         response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()
         json_response = response.json()
-        
+
         if (
             json_response.get("data")
             and json_response["data"].get("outputs")
