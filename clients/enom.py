@@ -45,6 +45,8 @@ class EnomClient:
         if not contact_info:
             raise ValueError("Contact information is required for domain registration")
 
+        if "." not in domain_name:
+            raise ValueError("Invalid domain name format. Expected format: example.com")
         sld, tld = domain_name.split(".")
 
         params = {
@@ -139,6 +141,8 @@ class EnomClient:
         Returns:
             bool: True if domain is available, False otherwise
         """
+        if "." not in domain_name:
+            raise ValueError("Invalid domain name format. Expected format: example.com")
         sld, tld = domain_name.split(".")
         params = {
             "command": "Check",
@@ -178,6 +182,8 @@ class EnomClient:
             raise ValueError("Contact information is required for domain registration")
 
         # Extract SLD (second-level domain) and TLD (top-level domain)
+        if "." not in domain_name:
+            raise ValueError("Invalid domain name format. Expected format: example.com")
         sld, tld = domain_name.split(".")
 
         uid = reseller_id if reseller_id else self.reseller_id
